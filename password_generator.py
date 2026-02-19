@@ -1,54 +1,64 @@
-import random
+import secrets
 import string
+import argparse
 
-print("-" * 30 + " Welcome to password generator " + "-" * 30)
 
-message = """
-1- Add random numbers
-2- Add random letters
-3- Add random symbols
-4- Change the whole password
-"""
+def generate_password(length: int, use_lower=True, use_upper=True,
+                      use_digits=True, use_special=True) -> str:
+    """Generate a strong random password based on selected criteria."""
+    character_sets = []
 
-password = ""
+    if use_lower:
+        character_sets.append(string.ascii_lowercase)
+    if use_upper:
+        character_sets.append(string.ascii_uppercase)
+    if use_digits:
+        character_sets.append(string.digits)
+    if use_special:
+        character_sets.append(string.punctuation)
 
-while True:
-    print(message)
-    pick = input("Pick a number between 1 and 4: ")
+    if not character_sets:
+        raise ValueError("No character types selected for the password.")
 
-    if not pick.isdigit():
-        print("Type a number")
-        continue
+    all_chars = ''.join(character_sets)
 
-    pick = int(pick)
+    # Ensure at least one character from each selected set
+    password = [
+        secrets.choice(s) for s in character_sets
+    ]
 
-    if pick < 1 or pick > 4:
-        print("Please choose a valid number")
-        continue
+    # Fill the rest of the length
+    password += [secrets.choice(all_chars) for _ in range(length - len(password))]
 
-    if pick == 1:
-        if password == "":
-            password = input("Type your password: ")
-        for i in range(4):
-            password += str(random.randint(0, 9))
-        print(password)
+    # Shuffle to avoid predictable placement
+    secrets.SystemRandom().shuffle(password)
 
-    elif pick == 2:
-        if password == "":
-            password = input("Type your password: ")
-        for i in range(4):
-            password += random.choice(string.ascii_letters)
-        print(password)
+    return ''.join(password)
 
-    elif pick == 3:
-        if password == "":
-            password = input("Type your password: ")
-        for i in range(4):
-            password += random.choice(string.punctuation)
-        print(password)
 
-    elif pick == 4:
-        length = int(input("Enter password length: "))
-        chars = string.ascii_letters + string.digits + string.punctuation
-        password = ''.join(random.choice(chars) for _ in range(length))
-        print(password)
+def main():
+    parser = argparse.ArgumentParser(description="Secure Python Password Generator")
+    parser.add_argument("-l", "--length", type=int, default=12,
+                        help="Length of the password (default: 12)")
+    parser.add_argument("--no-lower", action="store_true", help="Exclude lowercase letters")
+    parser.add_argument("--no-upper", action="store_true", help="Exclude uppercase letters")
+    parser.add_argument("--no-digits", action="store_true", help="Exclude digits")
+    parser.add_argument("--no-special", action="store_true", help="Exclude special characters")
+
+    args = parser.parse_args()
+
+    try:
+        pwd = generate_password(
+            length=args.length,
+            use_lower=not args.no_lower,
+            use_upper=not args.no_upper,
+            use_digits=not args.no_digits,
+            use_special=not args.no_special
+        )
+        print(f"\n🔐 Generated Password:\n{pwd}\n")
+    except Exception as e:
+        print("Error:", e)
+
+
+if __name__ == "__main__":
+    main()
