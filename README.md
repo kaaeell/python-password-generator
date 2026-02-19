@@ -1,68 +1,77 @@
-# Password Generator (Python)
+# Python Password Generator
 
-A simple Python password generator that allows users to modify an existing password or generate a completely new one using random numbers, letters, and symbols.
-
-This project is menu-driven and runs in the terminal.
+A simple and flexible Python script to generate strong passwords.
 
 ---
 
 ## Features
 
-- Add random numbers to a password  
-- Add random letters to a password  
-- Add random symbols to a password  
-- Generate a completely new strong password  
-- Input validation to prevent text errors  
-- Uses Python standard libraries only  
+-  Generates random passwords with strong entropy
+-  Customizable: include or exclude
+  - lowercase letters
+  - uppercase letters
+  - digits
+  - special characters
+-  Uses `secrets` module for better security
+-  Command-line arguments support
 
 ---
 
-## How It Works
+## Installation
 
-When you run the program, a menu appears with four options:
-
-1. Add random numbers  
-2. Add random letters  
-3. Add random symbols  
-4. Change the whole password  
-
-The user selects an option, and the password is updated accordingly.  
-The password is kept in memory and can be modified multiple times.
+```bash
+git clone https://github.com/kaaeell/python-password-generator.git
+cd python-password-generator
+```
 
 ---
 
-## Requirements
+## Usage
 
-- Python 3.x  
-- No external libraries required  
+### Basic
 
----
+```bash
+python password_generator.py
+```
 
-## Libraries Used
-
-- random  
-- string  
+Generates a 12-character password.
 
 ---
 
-## How to Run
+### Custom length
 
-1. Make sure Python is installed  
-2. Clone or download this repository  
-3. Open a terminal in the project folder  
-4. Run the script using:
-
-   python main.py
-
-5. Follow the on-screen instructions  
+```bash
+python password_generator.py -l 16
+```
 
 ---
 
-## Project Purpose
+### Exclude character types
 
-This project was created to practice:
-- Python loops  
-- Conditional statements  
-- Input validation  
-- String manipulation  
-- Random value generation  
+```bash
+python password_generator.py --no-special --no-upper
+```
+
+---
+
+## Tips
+
+- Use longer passwords (15+ chars) for better security.:contentReference[oaicite:2]{index=2}
+- Try different combinations of character sets for strong randomness.
+
+---
+
+## Example Output
+
+```
+🔐 Generated Password:
+x4!Bf8$zUqT2mL%
+```
+
+---
+
+## Future Ideas
+
+- Build a simple GUI version
+- Save passwords to a file or clipboard
+- Add strength scoring
